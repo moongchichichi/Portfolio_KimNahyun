@@ -380,7 +380,7 @@ body:not(.landing-view) .portfolio-back{grid-row:1;align-self:start;margin-top:8
 
 
 /* Consistent masthead position and subdued gray background. */
-:root{--bg:#555}
+:root{--bg:#000}
 body,#image-viewer,#image-viewer::backdrop{background:var(--bg)}
 .image-button img{background:transparent}
 .site-header,body:not(.landing-view) .site-header{padding:22px var(--text-inset) 18px}
@@ -390,6 +390,18 @@ body:not(.landing-view) .context-project .portfolio-back{margin-top:12px}
 .project-pagination a{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;font-size:24px}
 @media(max-width:1000px){body:not(.landing-view) .page-context{row-gap:24px}}
 @media(max-width:760px){.site-header,body:not(.landing-view) .site-header{padding-top:16px;padding-bottom:14px}}
+
+
+/* Landing titles overlay the artwork only on hover or keyboard focus. */
+.project-thumbnail{position:relative;gap:0}
+.project-thumbnail>span{position:absolute;left:16px;right:16px;bottom:16px;min-height:0;color:#fff;opacity:0;pointer-events:none;transition:opacity .15s}
+.project-thumbnail:hover,.project-thumbnail:focus-visible{text-decoration:none}
+.project-thumbnail:hover>span,.project-thumbnail:focus-visible>span{opacity:1}
+/* Project heading leads the right-hand information column. */
+.page-context .context-spec>.project-title{font-size:inherit;line-height:1.6;margin:0 0 16px}
+/* English and Korean share the same typography without a divider. */
+.description .copy-en{padding-top:0;border-top:0;color:inherit;opacity:1;font-size:inherit;font-weight:inherit;line-height:inherit;letter-spacing:inherit}
+@media(prefers-reduced-motion:reduce){.project-thumbnail>span{transition:none}}
 
 </style>
 </head>
@@ -419,8 +431,6 @@ body:not(.landing-view) .context-project .portfolio-back{margin-top:12px}
  <button class="image-button" type="button" aria-label="조판 가이드 포스터 2 크게 보기"><img src="images/hangeul-guide-02.jpg" alt="조판 가이드 포스터 2" loading="lazy" decoding="async" width="2808" height="2000"></button>
 </figure><figure class="at media" style="--x:73.21429%;--y:46.31980%;--w:11.64286%;--h:14.46701%;" data-image="hangeul-guide-03">
  <button class="image-button" type="button" aria-label="조판 가이드 포스터 3 크게 보기"><img src="images/hangeul-guide-03.jpg" alt="조판 가이드 포스터 3" loading="lazy" decoding="async" width="2811" height="2000"></button>
-</figure><figure class="at media" style="--x:73.21429%;--y:62.56345%;--w:7.92857%;--h:13.07107%;" data-image="hangeul-guide-04">
- <button class="image-button" type="button" aria-label="조판 가이드 포스터 4 크게 보기"><img src="images/hangeul-guide-04.jpg" alt="조판 가이드 포스터 4" loading="lazy" decoding="async" width="111" height="103"></button>
 </figure></div><div class="sheet photo-sheet" aria-label="전시 전경"><figure class="at media" style="--x:0.00000%;--y:0.00000%;--w:100.00000%;--h:100.00000%;" data-image="hangeul-exhibition-01">
  <button class="image-button" type="button" aria-label="한글 세로쓰기 전시 전경 1 크게 보기"><img src="images/hangeul-exhibition-01.jpg" alt="한글 세로쓰기 전시 전경 1" loading="lazy" decoding="async" width="1400" height="788"></button>
 </figure><div class="at photo-label" style="--x:2.92857%;--y:5.07614%;--w:28.57143%;">전시 전경</div></div><div class="sheet photo-sheet" aria-label="전시 전경"><figure class="at media" style="--x:0.00000%;--y:0.00000%;--w:100.00000%;--h:100.00000%;" data-image="hangeul-exhibition-02">
@@ -705,6 +715,8 @@ function showContext(sheet) {
   if (project === activeProject) return;
   activeProject = project;
   contextBar.replaceChildren(...[...projectContexts.get(project).children].map(node => node.cloneNode(true)));
+  const title = contextBar.querySelector('.context-project .project-title');
+  contextBar.querySelector('.context-spec').prepend(title);
   contextBar.querySelector('.context-project').append(backButton);
 }
 showContext(sheets[0]);
